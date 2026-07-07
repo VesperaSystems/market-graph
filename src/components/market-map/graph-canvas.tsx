@@ -13,6 +13,13 @@ interface GraphCanvasProps {
   selectedNodeId: string | null;
   onSelectNode: (nodeId: string | null) => void;
   compact?: boolean;
+  fullscreen?: boolean;
+  title?: string;
+  summary?: string;
+  stats?: {
+    nodes: number;
+    edges: number;
+  };
 }
 
 function DriftingNode({
@@ -139,11 +146,31 @@ function GraphScene({ nodes, edges, selectedNodeId, onSelectNode, compact }: Gra
 }
 
 export function GraphCanvas(props: GraphCanvasProps) {
-  const { compact = false } = props;
+  const { compact = false, fullscreen = false, title, summary, stats } = props;
 
   return (
-    <div className="hud-panel relative h-full min-h-[620px] overflow-hidden">
-      {!compact ? (
+    <div
+      className={
+        fullscreen
+          ? "relative h-[100dvh] min-h-[100dvh] w-full overflow-hidden bg-[#050505]"
+          : "hud-panel relative h-full min-h-[620px] overflow-hidden"
+      }
+    >
+      {fullscreen ? (
+        <>
+          <div className="pointer-events-none absolute left-5 top-5 z-10 max-w-3xl bg-[rgba(5,5,5,0.42)] px-4 py-3 backdrop-blur-sm">
+            <p className="hud-label">Graph</p>
+            {title ? <h1 className="mt-2 text-2xl font-medium text-white">{title}</h1> : null}
+            {summary ? <p className="mt-2 text-sm text-zinc-400">{summary}</p> : null}
+          </div>
+          {stats ? (
+            <div className="pointer-events-none absolute right-5 top-5 z-10 bg-[rgba(5,5,5,0.42)] px-4 py-3 text-right text-sm text-zinc-400 backdrop-blur-sm">
+              <p>{stats.nodes} nodes</p>
+              <p>{stats.edges} edges</p>
+            </div>
+          ) : null}
+        </>
+      ) : !compact ? (
         <div className="pointer-events-none absolute left-4 top-4 z-10 border border-white/12 bg-[rgba(8,8,8,0.8)] px-3 py-2">
           <p className="hud-label">Graph Status</p>
           <p className="mt-1 text-xs text-zinc-300">Animated fictional venture network</p>
