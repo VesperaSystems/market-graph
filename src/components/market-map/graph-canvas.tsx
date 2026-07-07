@@ -43,7 +43,7 @@ function DriftingNode({
     );
   });
 
-  const scale = isSelected ? 1.26 : isHovered ? 1.12 : 1;
+  const scale = isSelected ? 1.22 : isHovered ? 1.08 : 1;
 
   return (
     <group ref={groupRef} position={node.position}>
@@ -53,20 +53,20 @@ function DriftingNode({
         onPointerOver={() => onHover(node.id)}
         onPointerOut={() => onHover(null)}
       >
-        <sphereGeometry args={[node.radius * (compact ? 0.82 : 1), 22, 22]} />
+        <sphereGeometry args={[node.radius * (compact ? 0.68 : 0.82), 20, 20]} />
         <meshStandardMaterial
           color={node.color}
           emissive={node.color}
-          emissiveIntensity={isSelected ? 0.68 : isHovered ? 0.44 : 0.18}
+          emissiveIntensity={isSelected ? 0.52 : isHovered ? 0.34 : 0.12}
           roughness={0.18}
           metalness={0.76}
         />
       </mesh>
       {(isSelected || isHovered || (!compact && node.type === "sector")) && (
         <Text
-          position={[0, node.radius + (compact ? 0.9 : 1.2), 0]}
+          position={[0, node.radius + (compact ? 0.76 : 1.04), 0]}
           color={isSelected ? "#ffffff" : "#d4d4d4"}
-          fontSize={compact ? 0.54 : node.type === "sector" ? 0.9 : 0.68}
+          fontSize={compact ? 0.48 : node.type === "sector" ? 0.78 : 0.62}
           anchorX="center"
           anchorY="middle"
           maxWidth={10}
@@ -105,7 +105,7 @@ function GraphScene({ nodes, edges, selectedNodeId, onSelectNode, compact }: Gra
             color={active ? "#fafafa" : index % 4 === 0 ? "#a3a3a3" : "#404040"}
             transparent
             opacity={active ? 0.88 : index % 4 === 0 ? 0.3 : 0.18}
-            lineWidth={active ? 1.9 : Math.max(0.45, edge.strength)}
+            lineWidth={active ? 1.6 : Math.max(0.38, edge.strength * 0.78)}
             dashed={!active && index % 3 === 0}
             dashScale={12}
             gapSize={0.55}

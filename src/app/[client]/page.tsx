@@ -1,11 +1,5 @@
 import { GraphDisplay } from "@/components/graph/graph-display";
-
-function formatClientLabel(value: string) {
-  return value
-    .split("-")
-    .map((part) => part.toUpperCase())
-    .join(" ");
-}
+import { getClientGraphConfig } from "@/lib/client-graphs";
 
 export default async function ClientGraphPage({
   params,
@@ -14,5 +8,5 @@ export default async function ClientGraphPage({
 }) {
   const { client } = await params;
 
-  return <GraphDisplay clientLabel={formatClientLabel(client)} />;
+  return <GraphDisplay config={getClientGraphConfig(client)} />;
 }

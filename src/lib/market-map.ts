@@ -7,11 +7,11 @@ import {
 } from "@/types/venture";
 
 const NODE_COLORS: Record<VentureNode["type"], string> = {
-  company: "#7dd3fc",
-  investor: "#f59e0b",
-  founder: "#c084fc",
-  university: "#34d399",
-  sector: "#fb7185",
+  company: "#FAFAFA",
+  investor: "#D4D4D8",
+  founder: "#A1A1AA",
+  university: "#71717A",
+  sector: "#E4E4E7",
 };
 
 const TYPE_ORDER: VentureNode["type"][] = [
@@ -61,9 +61,15 @@ export function getFilterOptions() {
   const companies = ventureNodes.filter((node) => node.type === "company");
   const investors = ventureNodes.filter((node) => node.type === "investor");
 
-  const sectors = [...new Set(companies.map((node) => node.sector).filter((value): value is string => Boolean(value)))].sort();
-  const countries = [...new Set(companies.map((node) => node.country).filter((value): value is string => Boolean(value)))].sort();
-  const stages: string[] = [...new Set(companies.flatMap((node) => (node.stage ? [node.stage] : [])))].sort();
+  const sectors = [
+    ...new Set(companies.map((node) => node.sector).filter((value): value is string => Boolean(value))),
+  ].sort();
+  const countries = [
+    ...new Set(companies.map((node) => node.country).filter((value): value is string => Boolean(value))),
+  ].sort();
+  const stages: string[] = [
+    ...new Set(companies.flatMap((node) => (node.stage ? [node.stage] : []))),
+  ].sort();
 
   return {
     sectors,
@@ -102,35 +108,28 @@ export function getVisibleGraph(filters: MarketMapFilters) {
     }
 
     if (filters.year !== "all") {
-      const hasYearMatch = ventureEdges.some(
-        (edge) => (edge.source === node.id || edge.target === node.id) && String(edge.year) === filters.year,
+      const activeInYear = ventureEdges.some(
+        (edge) => edge.target === node.id && String(edge.year) === filters.year,
       );
 
-      if (!hasYearMatch) return false;
+      if (!activeInYear) return false;
     }
 
     return true;
   });
 
-  const matchedOtherNodes = ventureNodes.filter(
-    (node) => node.type !== "company" && searchMatches(node, filters.search),
+  const matchedCompanyIds = new Set(matchedCompanies.map((node) => node.id));
+  const relatedEdges = ventureEdges.filter(
+    (edge) => matchedCompanyIds.has(edge.source) || matchedCompanyIds.has(edge.target),
   );
+  const relatedNodeIds = new Set<string>([
+    ...matchedCompanyIds,
+    ...relatedEdges.flatMap((edge) => [edge.source, edge.target]),
+  ]);
 
-  const constrained =
-    filters.valuationBand !== "all" ||
-    filters.sector !== "all" ||
-    filters.country !== "all" ||
-    filters.stage !== "all" ||
-    filters.investor !== "all" ||
-    filters.year !== "all" ||
-    filters.search.trim().length > 0;
-
-  if (!constrained) {
-    return {
-      nodes: projectNodes(ventureNodes),
-      edges: ventureEdges,
-    };
-  }
+  const matchedOtherNodes = ventureNodes.filter(
+    (node) => node.type !== "company" && relatedNodeIds.has(node.id) && searchMatches(node, filters.search),
+  );
 
   const focusIds = new Set<string>([
     ...matchedCompanies.map((node) => node.id),
@@ -177,7 +176,9 @@ function projectNodes(nodes: VentureNode[]): PositionedVentureNode[] {
 
   return nodes
     .slice()
-    .sort((a, b) => TYPE_ORDER.indexOf(a.type) - TYPE_ORDER.indexOf(b.type) || a.name.localeCompare(b.name))
+    .sort(
+      (a, b) => TYPE_ORDER.indexOf(a.type) - TYPE_ORDER.indexOf(b.type) || a.name.localeCompare(b.name),
+    )
     .map((node) => {
       const index = typeIndices[node.type]++;
       const total = counts[node.type] || 1;
@@ -185,8 +186,8 @@ function projectNodes(nodes: VentureNode[]): PositionedVentureNode[] {
 
       const layout = getTypeLayout(node.type, angle, index);
       const influenceBase = node.valuationGBP
-        ? Math.min(3.8, 1.2 + Math.log10(node.valuationGBP / 1000000 + 1) * 0.48)
-        : 1 + node.metrics.influenceScore / 120;
+        ? Math.min(2.8, 0.82 + Math.log10(node.valuationGBP / 1000000 + 1) * 0.34)
+        : 0.76 + node.metrics.influenceScore / 180;
 
       return {
         ...node,

@@ -1,5 +1,6 @@
 import { GraphDisplay } from "@/components/graph/graph-display";
+import { getClientGraphConfig } from "@/lib/client-graphs";
 
 export default function HomePage() {
-  return <GraphDisplay clientLabel="Demo Graph" />;
+  return <GraphDisplay config={getClientGraphConfig("demo")} />;
 }
