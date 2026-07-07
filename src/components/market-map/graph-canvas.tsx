@@ -1,6 +1,6 @@
 "use client";
 
-import { Line, OrbitControls, Stars, Text } from "@react-three/drei";
+import { Billboard, Line, OrbitControls, Stars, Text } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import type { Group, PerspectiveCamera } from "three";
@@ -165,17 +165,24 @@ function DriftingNode({
         />
       </mesh>
       {showLabel ? (
-        <Text
+        <Billboard
           position={[0, sphereSize + (compact ? 0.54 : 0.78), 0]}
-          color={isSelected ? "#ffffff" : isHovered ? "#e4e4e7" : "#a1a1aa"}
-          fontSize={compact ? 0.22 : 0.28}
-          lineHeight={1.28}
-          anchorX="center"
-          anchorY="middle"
-          maxWidth={7.5}
+          follow
+          lockX={false}
+          lockY={false}
+          lockZ={false}
         >
-          {nodeLabel(node)}
-        </Text>
+          <Text
+            color={isSelected ? "#ffffff" : isHovered ? "#e4e4e7" : "#a1a1aa"}
+            fontSize={compact ? 0.22 : 0.28}
+            lineHeight={1.28}
+            anchorX="center"
+            anchorY="middle"
+            maxWidth={7.5}
+          >
+            {nodeLabel(node)}
+          </Text>
+        </Billboard>
       ) : null}
     </group>
   );
