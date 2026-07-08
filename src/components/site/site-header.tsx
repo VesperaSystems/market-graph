@@ -27,11 +27,6 @@ export function SiteHeader() {
   const [keyReveal, setKeyReveal] = useState(false);
 
   useEffect(() => {
-    setMouseReveal(false);
-    setKeyReveal(false);
-  }, [pathname]);
-
-  useEffect(() => {
     if (!presentationRoute) return undefined;
 
     const handleKeyDown = (event: KeyboardEvent) => {

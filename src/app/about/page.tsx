@@ -1,35 +1,11 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { BrandMark } from "@/components/site/brand-mark";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = { title: "About", description: "The Vespera Systems thesis: finance is a graph of capital, people, incentives, and time.", alternates: { canonical: "/about" } };
+const points = ["Markets are networks, not rows.", "Investment teams need synthesis more than another dashboard.", "AI, legal, quant, and graph context should share memory."];
 export default function AboutPage() {
-  return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-6 py-16 lg:px-10 lg:py-20">
-      <div className="hud-panel p-8 lg:p-12">
-        <p className="hud-label">About Vespera Systems</p>
-        <h1 className="mt-6 max-w-3xl text-4xl font-medium tracking-[-0.04em] text-white sm:text-5xl">
-          Markets are networks of capital, people, incentives, and information.
-        </h1>
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-zinc-300">
-          Vespera Systems explores finance as a living system rather than a flat list of deals. This first product prototype turns venture activity into a navigable graph so we can study how founders, capital allocators, institutions, and sectors shape one another.
-        </p>
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          <div className="border border-white/10 bg-[rgba(255,255,255,0.02)] p-6">
-            <p className="hud-label">System Lens</p>
-            <p className="mt-3 text-sm leading-6 text-zinc-300">
-              We care about relationships, not just headline metrics: who funds whom, where expertise clusters, and how influence compounds.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-[rgba(255,255,255,0.02)] p-6">
-            <p className="hud-label">Research Mode</p>
-            <p className="mt-3 text-sm leading-6 text-zinc-300">
-              The current release uses mocked data so we can iterate on clarity, interface, and systems thinking before adding a live backend.
-            </p>
-          </div>
-          <div className="border border-white/10 bg-[rgba(255,255,255,0.02)] p-6">
-            <p className="hud-label">Client Routes</p>
-            <p className="mt-3 text-sm leading-6 text-zinc-300">
-              The apex route can remain a demo graph, while client-specific graph displays can live at routes like /rbs, /sjp, or /ubs.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="min-h-screen px-6 py-6 text-white lg:px-10"><header className="mx-auto flex max-w-7xl items-center justify-between"><BrandMark /><Button asChild variant="outline"><Link href="/">Back</Link></Button></header><main className="mx-auto max-w-7xl py-20"><p className="hud-label">Company thesis</p><h1 className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.94] tracking-[-0.06em] sm:text-7xl">Vespera exists because finance is already a graph. Most tools just pretend it is a spreadsheet.</h1><div className="mt-12 grid gap-4 md:grid-cols-3">{points.map((point) => <Card key={point}><CardHeader><CardTitle>{point}</CardTitle></CardHeader><CardContent><p className="text-sm leading-6 text-neutral-400">We build operational systems around this belief: relationship-first displays, AI analysis, legal workflow, and quant tooling as one institutional layer.</p></CardContent></Card>)}</div></main></div>;
 }

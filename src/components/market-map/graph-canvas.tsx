@@ -4,6 +4,7 @@ import { Billboard, Line, OrbitControls, Stars, Text } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import type { Group, PerspectiveCamera } from "three";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Vector3 } from "three";
 
 import { PositionedVentureNode, VentureEdge } from "@/types/venture";
@@ -84,7 +85,7 @@ function CameraDirector({
   controlsRef,
   focus,
 }: {
-  controlsRef: React.MutableRefObject<any>;
+  controlsRef: React.MutableRefObject<OrbitControlsImpl | null>;
   focus: { position: Vector3; target: Vector3 } | null;
 }) {
   useFrame(({ camera }) => {
@@ -190,7 +191,7 @@ function GraphScene({ nodes, edges, selectedNodeId, onSelectNode, compact }: Gra
   const [focusedEdgeId, setFocusedEdgeId] = useState<string | null>(null);
   const [manualView, setManualView] = useState(false);
   const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
-  const controlsRef = useRef<any>(null);
+  const controlsRef = useRef<OrbitControlsImpl | null>(null);
 
   const importantNodeIds = useMemo(() => {
     return new Set(

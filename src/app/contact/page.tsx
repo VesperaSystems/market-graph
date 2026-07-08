@@ -1,0 +1,6 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { BrandMark } from "@/components/site/brand-mark";
+import { Button } from "@/components/ui/button";
+export const metadata: Metadata = { title: "Contact", description: "Request a Vespera Systems private briefing or product demo.", alternates: { canonical: "/contact" } };
+export default function ContactPage() { return <div className="min-h-screen px-6 py-6 text-white lg:px-10"><header className="mx-auto flex max-w-7xl items-center justify-between"><BrandMark /><Button asChild variant="outline"><Link href="/">Back</Link></Button></header><main className="mx-auto grid max-w-5xl gap-8 py-20"><div className="hud-panel rounded-[40px] p-8 sm:p-10"><p className="hud-label">Institutional introductions</p><h1 className="mt-5 text-5xl font-semibold tracking-[-0.06em] sm:text-7xl">Request a private briefing.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-neutral-300">For demos, partnerships, hiring, or investor conversations, contact Vespera Systems directly.</p><div className="mt-8 flex flex-col gap-4 sm:flex-row"><Button asChild><a href="mailto:hello@vespera.systems?subject=Vespera%20Systems%20private%20briefing">hello@vespera.systems</a></Button><Button asChild variant="outline"><a href="https://vespera.systems/demo">View product demo</a></Button></div></div></main></div>; }
