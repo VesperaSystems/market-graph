@@ -46,14 +46,14 @@ src/
     about/
     map/
   components/
-    market-map/
+    market-graph/
     site/
   data/
     venture-seed.ts
   lib/
-    market-map.ts
+    market-graph.ts
   store/
-    use-market-map-store.ts
+    use-market-graph-store.ts
   types/
     venture.ts
 ```

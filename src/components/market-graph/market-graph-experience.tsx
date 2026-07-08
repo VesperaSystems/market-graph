@@ -2,22 +2,22 @@
 
 import { useMemo } from "react";
 
-import { DetailPanel } from "@/components/market-map/detail-panel";
-import { FilterPanel } from "@/components/market-map/filter-panel";
-import { GraphCanvas } from "@/components/market-map/graph-canvas";
+import { DetailPanel } from "@/components/market-graph/detail-panel";
+import { FilterPanel } from "@/components/market-graph/filter-panel";
+import { GraphCanvas } from "@/components/market-graph/graph-canvas";
 import {
   formatCurrency,
   getConnectedEdges,
   getFilterOptions,
   getNodeById,
   getVisibleGraph,
-} from "@/lib/market-map";
-import { useMarketMapStore } from "@/store/use-market-map-store";
+} from "@/lib/market-graph";
+import { useMarketGraphStore } from "@/store/use-market-graph-store";
 
 const filterOptions = getFilterOptions();
 
-export function MarketMapExperience() {
-  const { filters, selectedNodeId, selectNode, resetFilters, setFilter } = useMarketMapStore();
+export function MarketGraphExperience() {
+  const { filters, selectedNodeId, selectNode, resetFilters, setFilter } = useMarketGraphStore();
 
   const visibleGraph = useMemo(() => getVisibleGraph(filters), [filters]);
   const selectedNode = useMemo(() => getNodeById(selectedNodeId), [selectedNodeId]);

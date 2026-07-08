@@ -1,4 +1,4 @@
-import type { MarketMapFilters } from "@/types/venture";
+import type { MarketGraphFilters } from "@/types/venture";
 
 export type ProductModuleId = "graph" | "chat" | "legal" | "quant" | "files" | "config";
 export type TenantType = "quant" | "legal" | "finance" | "enterprise";
@@ -18,7 +18,7 @@ export interface ClientWorkspaceConfig {
   tenantType: TenantType;
   summary: string;
   modules: ProductModuleId[];
-  filters: MarketMapFilters;
+  filters: MarketGraphFilters;
 }
 
 export const productModules: ProductModule[] = [
@@ -32,7 +32,7 @@ export const productModules: ProductModule[] = [
 
 export const productModuleMap = new Map(productModules.map((module) => [module.id, module]));
 
-const baseFilters: MarketMapFilters = {
+const baseFilters: MarketGraphFilters = {
   valuationBand: "all",
   sector: "all",
   country: "all",

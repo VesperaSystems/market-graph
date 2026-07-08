@@ -54,7 +54,7 @@ export interface VentureEdge {
   strength: number;
 }
 
-export interface MarketMapFilters {
+export interface MarketGraphFilters {
   valuationBand: "all" | "under50m" | "50m-250m" | "250m-1b" | "1b+";
   sector: string;
   country: string;

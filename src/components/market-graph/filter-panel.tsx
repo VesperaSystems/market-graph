@@ -1,9 +1,9 @@
 "use client";
 
-import { MarketMapFilters } from "@/types/venture";
+import { MarketGraphFilters } from "@/types/venture";
 
 interface FilterPanelProps {
-  filters: MarketMapFilters;
+  filters: MarketGraphFilters;
   options: {
     sectors: string[];
     countries: string[];
@@ -11,7 +11,7 @@ interface FilterPanelProps {
     investors: string[];
     years: string[];
   };
-  onChange: <K extends keyof MarketMapFilters>(key: K, value: MarketMapFilters[K]) => void;
+  onChange: <K extends keyof MarketGraphFilters>(key: K, value: MarketGraphFilters[K]) => void;
   onReset: () => void;
 }
 
@@ -73,7 +73,7 @@ export function FilterPanel({ filters, options, onChange, onReset }: FilterPanel
         <SelectField
           label="Valuation"
           value={filters.valuationBand}
-          onChange={(value) => onChange("valuationBand", value as MarketMapFilters["valuationBand"])}
+          onChange={(value) => onChange("valuationBand", value as MarketGraphFilters["valuationBand"])}
           options={valuationOptions.map((option) => ({ label: option.label, value: option.value }))}
         />
         <SelectField

@@ -1,13 +1,13 @@
-import type { MarketMapFilters } from "@/types/venture";
+import type { MarketGraphFilters } from "@/types/venture";
 
 export interface ClientGraphConfig {
   slug: string;
   label: string;
   summary: string;
-  filters: MarketMapFilters;
+  filters: MarketGraphFilters;
 }
 
-const baseFilters: MarketMapFilters = {
+const baseFilters: MarketGraphFilters = {
   valuationBand: "all",
   sector: "all",
   country: "all",

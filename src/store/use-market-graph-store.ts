@@ -2,18 +2,18 @@
 
 import { create } from "zustand";
 
-import { defaultFilters } from "@/lib/market-map";
-import { MarketMapFilters } from "@/types/venture";
+import { defaultFilters } from "@/lib/market-graph";
+import { MarketGraphFilters } from "@/types/venture";
 
-interface MarketMapState {
-  filters: MarketMapFilters;
+interface MarketGraphState {
+  filters: MarketGraphFilters;
   selectedNodeId: string | null;
-  setFilter: <K extends keyof MarketMapFilters>(key: K, value: MarketMapFilters[K]) => void;
+  setFilter: <K extends keyof MarketGraphFilters>(key: K, value: MarketGraphFilters[K]) => void;
   resetFilters: () => void;
   selectNode: (nodeId: string | null) => void;
 }
 
-export const useMarketMapStore = create<MarketMapState>((set) => ({
+export const useMarketGraphStore = create<MarketGraphState>((set) => ({
   filters: defaultFilters,
   selectedNodeId: null,
   setFilter: (key, value) =>

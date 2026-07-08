@@ -3,8 +3,8 @@
 import { useMemo, useState } from "react";
 
 import type { ClientGraphConfig } from "@/lib/client-graphs";
-import { GraphCanvas } from "@/components/market-map/graph-canvas";
-import { getVisibleGraph } from "@/lib/market-map";
+import { GraphCanvas } from "@/components/market-graph/graph-canvas";
+import { getVisibleGraph } from "@/lib/market-graph";
 
 export function GraphDisplay({ config }: { config: ClientGraphConfig }) {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);

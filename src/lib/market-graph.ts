@@ -1,6 +1,6 @@
 import { ventureEdges, ventureNodes } from "@/data/venture-seed";
 import {
-  MarketMapFilters,
+  MarketGraphFilters,
   PositionedVentureNode,
   VentureEdge,
   VentureNode,
@@ -22,7 +22,7 @@ const TYPE_ORDER: VentureNode["type"][] = [
   "university",
 ];
 
-export const defaultFilters: MarketMapFilters = {
+export const defaultFilters: MarketGraphFilters = {
   valuationBand: "all",
   sector: "all",
   country: "all",
@@ -32,7 +32,7 @@ export const defaultFilters: MarketMapFilters = {
   search: "",
 };
 
-function valuationBandMatches(value: number | null, band: MarketMapFilters["valuationBand"]) {
+function valuationBandMatches(value: number | null, band: MarketGraphFilters["valuationBand"]) {
   if (band === "all") return true;
   if (value === null) return false;
   if (band === "under50m") return value < 50000000;
@@ -80,7 +80,7 @@ export function getFilterOptions() {
   };
 }
 
-export function getVisibleGraph(filters: MarketMapFilters) {
+export function getVisibleGraph(filters: MarketGraphFilters) {
   const companyNodes = ventureNodes.filter((node) => node.type === "company");
   const investorMap = new Map(
     ventureNodes.filter((node) => node.type === "investor").map((node) => [node.id, node.name]),
