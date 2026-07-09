@@ -1,6 +1,6 @@
 import mammoth from "mammoth";
-import { OpenAI } from "openai";
 import { z } from "zod";
+import { createChatCompletionsClient, getAIProviderConfig } from "@/lib/ai/provider";
 
 export const legalIssueSchema = z.object({
   id: z.string(),
@@ -69,9 +69,10 @@ function fallbackAnalysis(file: File, text: string): LegalAnalysis {
 export async function analyzeLegalDocument(file: File, context = "") {
   const text = (await extractDocumentText(file)).replace(/\r\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   if (!text) throw new Error("No text content could be extracted from this document.");
-  if (!process.env.OPENAI_API_KEY) return fallbackAnalysis(file, text);
+  const config = getAIProviderConfig();
+  if (!config) return fallbackAnalysis(file, text);
 
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const client = createChatCompletionsClient(config);
   const schema = {
     type: "object",
     properties: {
@@ -97,17 +98,24 @@ export async function analyzeLegalDocument(file: File, context = "") {
     additionalProperties: false,
   };
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o",
+  const response = await client.chat.completions.create({
+    model: config.model,
     temperature: 0.1,
-    response_format: { type: "json_schema", json_schema: { name: "LegalAnalysis", schema } },
+    ...(config.provider === "openai"
+      ? { response_format: { type: "json_schema" as const, json_schema: { name: "LegalAnalysis", schema } } }
+      : {}),
     messages: [
-      { role: "system", content: "Analyze only the supplied contract text. Return concise structured legal issues. Do not invent clauses. This is analysis support, not legal advice." },
+      {
+        role: "system",
+        content:
+          "Analyze only the supplied contract text. Return concise structured legal issues. Do not invent clauses. This is analysis support, not legal advice. Return only valid JSON with this shape: {\"document\":\"string\",\"issues\":[{\"id\":\"string\",\"type\":\"string\",\"original_text\":\"string\",\"recommended_text\":\"string\",\"comment\":\"string\",\"severity\":\"low|medium|high\"}]}",
+      },
       { role: "user", content: `Document: ${file.name}\nContext: ${context || "None"}\n\nText:\n${text.slice(0, 50000)}` },
     ],
   });
 
-  const parsed = JSON.parse(response.choices[0]?.message.content || "{}");
+  const content = response.choices[0]?.message.content || "{}";
+  const parsed = JSON.parse(extractJsonObject(content));
   return legalAnalysisSchema.parse({
     ...parsed,
     metadata: {
@@ -119,4 +127,15 @@ export async function analyzeLegalDocument(file: File, context = "") {
       issuesFound: parsed.issues?.length || 0,
     },
   });
+}
+
+function extractJsonObject(content: string) {
+  const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(content);
+  if (fenced?.[1]) return fenced[1].trim();
+
+  const first = content.indexOf("{");
+  const last = content.lastIndexOf("}");
+  if (first >= 0 && last > first) return content.slice(first, last + 1);
+
+  return content;
 }
